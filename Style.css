@@ -1,0 +1,25 @@
+.dog-container {
+    display: inline-block;
+    margin: 10px;
+    text-align: center;
+    
+}
+.titles {
+    font-weight: lighter;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+}
+
+.dog-image {
+    width: 200px;
+    height: 200px;
+    border: 5px solid #ccc;
+    border-radius: 10px;
+    
+}
+
+.breed-name {
+    margin-top: 5px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}

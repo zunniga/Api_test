@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="Style.css" />
+    <title>Consumo de Apis!</title>
+  </head>
+  <body>
+    <div>
+      <!-- CONSUMIENDO UNA API DE PERROS -->
+      <div class="titles">
+        <h1>API DEC-DOGS</h1>
+      </div>
+      <div id="dogs"></div>
+    </div>
+
+    <div>
+      <!-- CONSUMIENDO UNA API DE RICK AND MORTY -->
+      <div class="titles">
+        <h1>API OF RICK AND MORTY</h1>
+      </div>
+      <div id="characters"></div>
+    </div>
+
+    <script>
+      // Código para la API de Perros
+      const numImages = 5;
+      const dogApiURL = `https://dog.ceo/api/breeds/image/random/${numImages}`;
+
+      fetch(dogApiURL)
+        .then((response) => response.json())
+        .then((data) => {
+          data.message.forEach((imageUrl) => {
+            const container = document.createElement("div");
+            container.className = "dog-container";
+
+            const img = document.createElement("img");
+            img.src = imageUrl;
+            img.className = "dog-image";
+            container.appendChild(img);
+
+            const breedName = imageUrl.split("/")[4];
+            const breedText = breedName.replace("-", " ");
+
+            const name = document.createElement("div");
+            name.className = "breed-name";
+            name.textContent = capitalizeWords(breedText);
+            container.appendChild(name);
+
+            document.getElementById("dogs").appendChild(container);
+          });
+        })
+        .catch((error) => {
+          console.error("Error al consumir la API de Perros:", error);
+        });
+
+      function capitalizeWords(str) {
+        return str.replace(/\b\w/g, (char) => char.toUpperCase());
+      }
+
+      // Código para la API de Rick and Morty
+      const baseURL = "https://rickandmortyapi.com/api/character";
+
+      // Función para obtener un número aleatorio dentro del rango de páginas
+      function getRandomPage() {
+        // Puedes ajustar el rango de páginas según la información de la API
+        const totalPages = 42; // Número total de páginas disponibles
+        return Math.floor(Math.random() * totalPages) + 1;
+      }
+
+      // Función para obtener los personajes
+      function fetchCharacters(url) {
+        fetch(url)
+          .then((response) => response.json())
+          .then((data) => {
+            // Obtener solo los primeros 5 personajes
+            const charactersToDisplay = data.results.slice(0, 5);
+            displayCharacters(charactersToDisplay);
+          })
+          .catch((error) => {
+            console.error("Error al consumir la API de Rick and Morty:", error);
+          });
+      }
+
+      // Función para mostrar los personajes en la página
+      function displayCharacters(characters) {
+        const container = document.getElementById("characters");
+        container.innerHTML = ""; // Limpiar el contenedor antes de agregar nuevos personajes
+
+        characters.forEach((character) => {
+          const charDiv = document.createElement("div");
+          charDiv.className = "dog-container";
+
+          const img = document.createElement("img");
+          img.src = character.image;
+          img.alt = character.name;
+          img.className = "dog-image";
+
+          const name = document.createElement("div");
+          name.className = "breed-name";
+          name.textContent = character.name;
+
+          charDiv.appendChild(img);
+          charDiv.appendChild(name);
+          container.appendChild(charDiv);
+        });
+      }
+
+      // Cargar una página aleatoria al iniciar
+      fetchCharacters(`${baseURL}?page=${getRandomPage()}`);
+    </script>
+  </body>
+</html>
