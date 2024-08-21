@@ -23,6 +23,12 @@
       <div id="characters"></div>
     </div>
 
+    <div class="titles">
+      <h1>API OF AVICII</h1>
+    </div>
+    <div id="contenedorArtista"></div>
+  </div>
+
     <script>
       // Código para la API de Perros
       const numImages = 5;
@@ -58,6 +64,8 @@
       function capitalizeWords(str) {
         return str.replace(/\b\w/g, (char) => char.toUpperCase());
       }
+
+
 
       // Código para la API de Rick and Morty
       const baseURL = "https://rickandmortyapi.com/api/character";
@@ -109,6 +117,60 @@
 
       // Cargar una página aleatoria al iniciar
       fetchCharacters(`${baseURL}?page=${getRandomPage()}`);
+
+      // Consumiendo una api de avicii
+          
+      const aviciiApiEndpoint = "https://avicii.onrender.com/api/v1/avicii";
+
+      // Función para obtener y mostrar la información del artista
+      function obtenerArtista(url) {
+        fetch(url)
+          .then((respuesta) => respuesta.json())
+          .then((datos) => {
+            if (datos.length > 0) {
+              // Si hay datos disponibles, mostrar la información del primer artista en la lista
+              mostrarArtista(datos[0]);
+            } else {
+              console.error("No se encontraron datos en la API de Avicii.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error al consumir la API de Avicii:", error);
+          });
+      }
+      
+      // Función para mostrar la información del artista en la página
+      function mostrarArtista(artista) {
+        const contenedor = document.getElementById("contenedorArtista");
+        contenedor.innerHTML = ""; // Limpiar el contenedor antes de agregar nueva información
+      
+        // Crear y agregar elementos al DOM con la información del artista
+        const divArtista = document.createElement("div");
+        divArtista.className = "contenedor-artista";
+      
+        const imagen = document.createElement("img");
+        imagen.src = artista.imagenArtista;
+        imagen.alt = artista.nombreArtistico;
+        imagen.className = "imagen-artista";
+      
+        const nombre = document.createElement("div");
+        nombre.className = "nombre-artistico";
+        nombre.textContent = artista.nombreArtistico;
+      
+        const descripcion = document.createElement("div");
+        descripcion.className = "descripcion-artista";
+        descripcion.textContent = artista.descripcion;
+      
+        divArtista.appendChild(imagen);
+        divArtista.appendChild(nombre);
+        divArtista.appendChild(descripcion);
+        contenedor.appendChild(divArtista);
+      }
+      
+      // Cargar la información del artista al iniciar
+      obtenerArtista(aviciiApiEndpoint);
+      
+            
     </script>
   </body>
 </html>
